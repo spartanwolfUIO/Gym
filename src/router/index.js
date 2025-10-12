@@ -14,7 +14,7 @@ const Rutinas = () => import('../views/Rutinas.vue')
 
 const routes = [
   { path: '/', name: 'Home', component: Home, meta: { requiresAuth: true } },
-  { path: '/user', name: 'User', component: User, meta: { requiresAuth: true } },
+  { path: '/user', name: 'User', component: User},
   { path: '/Registro', name: 'RegistroAtleta', component: RegistroAtleta, meta: { requiresAuth: true } },
   { path: '/AgregarMediciones', name: 'Mediciones', component: HistorialMediciones, meta: { requiresAuth: true } },
   { path: '/MisMediciones', name: 'MedicionesUser', component: HistorialMedicionesUser, meta: { requiresAuth: true } },
