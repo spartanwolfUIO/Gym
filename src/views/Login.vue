@@ -51,9 +51,7 @@ const login = async () => {
 /* Contenedor principal */
 div {
   max-width: 400px;
-  margin: 80px auto 0;
   background: #ffffff;
-  padding: 25px;
   border-radius: 15px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
