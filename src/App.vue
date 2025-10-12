@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import Nav from './views/Nav.vue'
+import Nav from './views/nav.vue'
 import { ref } from 'vue'
 
 const usuario = ref(JSON.parse(localStorage.getItem('usuario')))
