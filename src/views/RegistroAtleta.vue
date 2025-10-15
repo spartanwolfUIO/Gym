@@ -166,39 +166,64 @@ const formatFecha = (fecha) => {
 const registrarAtleta = async () => {
   error.value = ''
   mensajeExito.value = ''
+  const cedulaTrim = cedula.value.trim()
+  const nombresTrim = nombres.value.trim()
+  const apellidosTrim = apellidos.value.trim()
+  const celularTrim = celular.value.trim()
 
+  // 1️⃣ Validar que la cédula no esté registrada en atletas
+  const { data: atletaExistente, error: errCheck } = await supabase
+    .from('atletas')
+    .select('*')
+    .eq('cedula', cedulaTrim)
+    .single() // solo un resultado, si existe
+  if (errCheck) {
+    error.value = 'Error al verificar cédula: ' + errCheck.message
+    return
+  }
+  if (atletaExistente) {
+    error.value = '❌ Esta cédula ya está registrada para otro atleta.'
+    return
+  }
+
+  // 2️⃣ Crear el usuario primero
+  const { data: usuarioCreado, error: errUsuario } = await supabase
+    .from('usuarios')
+    .insert([{ cedula: cedulaTrim, password: cedulaTrim, rol: 'usuario' }])
+    .select()
+    .single()
+
+  if (errUsuario || !usuarioCreado) {
+    error.value = `Error al crear usuario: ${errUsuario?.message || 'Desconocido'}`
+    return
+  }
+
+  // 3️⃣ Crear el atleta y asignarle el id del usuario recién creado
   const { error: errAtleta } = await supabase.from('atletas').insert([
     {
-      nombres: nombres.value,
-      apellidos: apellidos.value,
+      nombres: nombresTrim,
+      apellidos: apellidosTrim,
       fecha_nacimiento: fechaNacimiento.value,
       peso_inicial: pesoInicial.value,
       edad: calcularEdad(fechaNacimiento.value),
       estatura_inicial: estaturaInicial.value,
       fecha_inicio_membresia: fechaInicioMembresia.value,
       fecha_fin_membresia: calcularMembresia(fechaInicioMembresia.value, mesesMembresia.value),
-      cedula: cedula.value,
-      celular: celular.value,
+      cedula: cedulaTrim,
+      celular: celularTrim,
+      usuario_id: usuarioCreado.id
     },
   ])
 
   if (errAtleta) {
-    error.value = errAtleta.message
+    error.value = `Usuario creado, pero error al crear atleta: ${errAtleta.message}`
     return
   }
 
-  const { error: errUsuario } = await supabase
-    .from('usuarios')
-    .insert([{ cedula: cedula.value, password: cedula.value, rol: 'usuario' }])
-
-  if (errUsuario) {
-    error.value = `Atleta creado, pero error al crear usuario: ${errUsuario.message}`
-  } else {
-    mensajeExito.value = '✅ Atleta registrado correctamente.'
-    setTimeout(() => (mensajeExito.value = ''), 4000)
-    limpiarFormulario()
-    await obtenerAtletas()
-  }
+  mensajeExito.value = '✅ Atleta registrado correctamente.'
+  setTimeout(() => (mensajeExito.value = ''), 4000)
+  limpiarFormulario()
+  await obtenerAtletas()
 }
 
 const limpiarFormulario = () => {
