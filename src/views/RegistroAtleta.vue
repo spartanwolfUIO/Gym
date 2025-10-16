@@ -107,7 +107,7 @@
             <td>{{ atleta.nombres }} {{ atleta.apellidos }}</td>
             <td>{{ calcularEdad(atleta.fecha_nacimiento) }} años</td>
             <td>{{ formatFecha(atleta.fecha_inicio_membresia) }}</td>
-            <td>{{ tiempoRestanteMembresia(atleta.fecha_fin_membresia) }}</td>
+            <td>{{ tiempoRestanteMembresia(atleta.fecha_fin_membresia) }} <button class="btn-actualizar" @click="actualizarMembresia(atleta)">Actualizar</button></td>
           </tr>
         </tbody>
       </table>
@@ -296,6 +296,27 @@ const tiempoRestanteMembresia = (fechaFin) => {
   return `Le quedan ${dias} día${dias > 1 ? 's' : ''}`
 }
 
+const actualizarMembresia = async (atleta) => {
+  const dias = parseInt(prompt(`Ingrese cuántos días desea agregar a la membresía de ${atleta.nombres}:`, '0'))
+  if (isNaN(dias) || dias <= 0) return alert('Ingrese un número válido de días.')
+
+  // Calcular nueva fecha de fin
+  const fechaActual = new Date(atleta.fecha_fin_membresia)
+  fechaActual.setDate(fechaActual.getDate() + dias)
+
+  const { error } = await supabase
+    .from('atletas')
+    .update({ fecha_fin_membresia: fechaActual.toISOString().split('T')[0] })
+    .eq('id', atleta.id)
+
+  if (error) {
+    alert('Error al actualizar membresía: ' + error.message)
+  } else {
+    alert(`✅ Membresía actualizada. Nueva fecha fin: ${fechaActual.toLocaleDateString()}`)
+    await obtenerAtletas()
+  }
+}
+
 
 onMounted(obtenerAtletas)
 </script>
@@ -441,6 +462,23 @@ onMounted(obtenerAtletas)
   border-top: 1px solid #e5e7eb;
 }
 
+.btn-actualizar {
+  margin-left: 10px;
+  padding: 4px 8px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.btn-actualizar:hover {
+  background-color: #1d4ed8;
+}
+
 /* 📱 Responsive */
 @media (max-width: 768px) {
   .formulario {
@@ -469,6 +507,12 @@ onMounted(obtenerAtletas)
   .btn-registrar,
   .btn-refrescar {
     width: 100%;
+  }
+
+    .btn-actualizar {
+    width: 100%;
+    margin: 8px 0 0 0; /* espacio arriba del botón */
+    box-sizing: border-box;
   }
 }
 </style>
