@@ -17,6 +17,7 @@
             <th>Grasa Visceral</th>
             <th>Bíceps I/D</th>
             <th>Piernas I/D</th>
+            <th>Gluteos</th>
             <th>Abdomen</th>
           </tr>
         </thead>
@@ -33,6 +34,7 @@
             <td>{{ m.grasa_visceral || '-' }}</td>
             <td>{{ m.bicep_izquierdo || '-' }}/{{ m.bicep_derecho || '-' }}</td>
             <td>{{ m.pierna_izquierda || '-' }}/{{ m.pierna_derecha || '-' }}</td>
+            <td>{{ m.gluteos || '-' }}</td>
             <td>{{ m.abdomen || '-' }}</td>
           </tr>
         </tbody>
