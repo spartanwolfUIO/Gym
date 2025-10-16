@@ -172,19 +172,21 @@ const registrarAtleta = async () => {
   const celularTrim = celular.value.trim()
 
   // 1️⃣ Validar que la cédula no esté registrada en atletas
-  const { data: atletaExistente, error: errCheck } = await supabase
-    .from('atletas')
-    .select('*')
-    .eq('cedula', cedulaTrim)
-    .single() // solo un resultado, si existe
-  if (errCheck) {
-    error.value = 'Error al verificar cédula: ' + errCheck.message
-    return
-  }
-  if (atletaExistente) {
-    error.value = '❌ Esta cédula ya está registrada para otro atleta.'
-    return
-  }
+const { data: atletasExistentes, error: errCheck } = await supabase
+  .from('atletas')
+  .select('*')
+  .eq('cedula', cedulaTrim)
+
+if (errCheck) {
+  error.value = 'Error al verificar cédula: ' + errCheck.message
+  return
+}
+
+// Si ya existe al menos un atleta con esa cédula
+if (atletasExistentes && atletasExistentes.length > 0) {
+  error.value = '❌ Esta cédula ya está registrada para otro atleta.'
+  return
+}
 
   // 2️⃣ Crear el usuario primero
   const { data: usuarioCreado, error: errUsuario } = await supabase
