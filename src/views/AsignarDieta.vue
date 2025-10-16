@@ -74,11 +74,13 @@ const dietasAtleta = ref([])
 const dias = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo']
 const comidas = ['Desayuno','Almuerzo','Cena','Snack']
 
+// Cargar atletas al montar
 onMounted(async () => {
   const { data } = await supabase.from('atletas').select('*').order('nombres')
   atletas.value = data || []
 })
 
+// Cargar dietas del atleta seleccionado
 const cargarDietas = async () => {
   if (!atletaSeleccionado.value) return
   const { data } = await supabase
@@ -89,23 +91,27 @@ const cargarDietas = async () => {
   dietasAtleta.value = data || []
 }
 
+// Guardar dieta
 const guardarDieta = async () => {
-  if (!atletaSeleccionado.value || !dia.value || !comida.value || !descripcion.value) return
+  if (!atletaSeleccionado.value || !dia.value || !comida.value || !descripcion.value.trim()) return
+
+  const nuevaDieta = {
+    atleta_id: atletaSeleccionado.value,
+    dia,
+    comida,
+    descripcion: descripcion.value.trim()
+  }
 
   const { error } = await supabase
     .from('dietas')
-    .upsert([
-      {
-        atleta_id: atletaSeleccionado.value,
-        dia,
-        comida,
-        descripcion: descripcion.value.trim()
-      }
-    ], { onConflict: ['atleta_id','dia','comida'] })
+    .upsert([nuevaDieta], { onConflict: ['atleta_id','dia','comida'] })
 
   if (error) {
     alert('Error al guardar dieta: ' + error.message)
   } else {
+    // Limpiar inputs
+    dia.value = ''
+    comida.value = ''
     descripcion.value = ''
     cargarDietas()
   }
@@ -139,7 +145,6 @@ const guardarDieta = async () => {
   border: 1px solid #ccc;
   background: #fff;
   color: #111827;
-
 }
 
 button {
@@ -149,6 +154,7 @@ button {
   padding: 10px 16px;
   border-radius: 8px;
   cursor: pointer;
+  margin-top: 10px;
 }
 
 button:hover {
@@ -169,5 +175,25 @@ th, td {
 
 th {
   background: #f3f3f3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contenedor {
+    padding: 15px;
+    margin: 20px;
+  }
+
+  .campo {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  table, th, td {
+    font-size: 14px;
+  }
 }
 </style>
