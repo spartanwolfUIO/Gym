@@ -96,15 +96,15 @@ const guardarDieta = async () => {
   if (!atletaSeleccionado.value || !dia.value || !comida.value || !descripcion.value.trim()) return
 
   const nuevaDieta = {
-    atleta_id: atletaSeleccionado.value,
-    dia,
-    comida,
-    descripcion: descripcion.value.trim()
-  }
+  atleta_id: atletaSeleccionado.value,
+  dia: dia.value,
+  comida: comida.value,
+  descripcion: descripcion.value.trim()
+}
 
   const { error } = await supabase
-    .from('dietas')
-    .upsert([nuevaDieta], { onConflict: ['atleta_id','dia','comida'] })
+  .from('dietas')
+  .upsert([nuevaDieta], { onConflict: ['atleta_id','dia','comida'] })
 
   if (error) {
     alert('Error al guardar dieta: ' + error.message)
