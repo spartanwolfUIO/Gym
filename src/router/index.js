@@ -11,7 +11,9 @@ const Reservar = () => import('../views/Reservar.vue')
 const AdminReservas = () => import('../views/AdminReservas.vue') 
 const AsignarRutinas = () => import('../views/AsignarRutinas.vue') 
 const Rutinas = () => import('../views/Rutinas.vue') 
+const Dieta = () => import('../views/Dieta.vue') 
 const NotFound = () => import('../views/NotFound.vue') // <-- NotFound
+const AsignarDieta = () => import('../views/AsignarDieta.vue') 
 
 const routes = [
   { path: '/', name: 'Home', component: Home, meta: { requiresAuth: true } },
@@ -21,8 +23,10 @@ const routes = [
   { path: '/MisMediciones', name: 'MedicionesUser', component: HistorialMedicionesUser, meta: { requiresAuth: true } },
   { path: '/reservar', name: 'Reservar', component: Reservar, meta: { requiresAuth: true } },
   { path: '/Rutinas', name: 'Rutinas', component: Rutinas, meta: { requiresAuth: true } },
+  { path: '/Dieta', name: 'Dieta', component: Dieta, meta: { requiresAuth: true } },
   { path: '/admin/reservas', name: 'AdminReservas', component: AdminReservas, meta: { requiresAuth: true, requiresAdmin: true } },
   { path: '/admin/rutinas', name: 'AdminRutinas', component: AsignarRutinas, meta: { requiresAuth: true, requiresAdmin: true } },
+  { path: '/admin/dietas', name: 'AsignarDieta', component: AsignarDieta, meta: { requiresAuth: true, requiresAdmin: true } },
   { path: '/login', name: 'Login', component: Login },
 
   // Catch-all para rutas no definidas

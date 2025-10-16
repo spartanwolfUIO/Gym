@@ -20,12 +20,14 @@
           <router-link to="/AgregarMediciones">Agregar Mediciones</router-link>
           <router-link to="/admin/reservas">Reservas</router-link>
           <router-link to="/admin/rutinas">Rutinas</router-link>
+          <router-link to="/admin/dietas">Dietas</router-link>
         </template>
 
         <template v-else-if="usuario?.rol === 'usuario'">
           <router-link to="/reservar">Reservar Horario</router-link>
           <router-link to="/Rutinas">Mis Rutinas</router-link>
           <router-link to="/MisMediciones">Mis Mediciones</router-link>
+          <router-link to="/Dieta">Mis Dietas</router-link>
         </template>
       </div>
 
