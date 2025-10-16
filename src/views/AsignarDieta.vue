@@ -138,6 +138,8 @@ const guardarDieta = async () => {
   border-radius: 8px;
   border: 1px solid #ccc;
   background: #fff;
+  color: #111827;
+
 }
 
 button {
