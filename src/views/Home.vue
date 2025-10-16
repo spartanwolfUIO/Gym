@@ -3,7 +3,7 @@
     <h1 class="gym-name">SPARTAN WOLF</h1>
 
     <img
-      src=""
+      src="../assets/logo-spartan.jpg"
       alt="Logo del gimnasio"
       class="gym-logo"
     />

@@ -47,6 +47,7 @@
             <th>Grasa Visceral</th>
             <th>Bíceps I/D</th>
             <th>Piernas I/D</th>
+            <th>Gluteos</th>
             <th>Abdomen</th>
           </tr>
         </thead>
@@ -63,6 +64,7 @@
             <td>{{ m.grasa_visceral || '-' }}</td>
             <td>{{ m.bicep_izquierdo || '-' }}/{{ m.bicep_derecho || '-' }}</td>
             <td>{{ m.pierna_izquierda || '-' }}/{{ m.pierna_derecha || '-' }}</td>
+            <td>{{ m.gluteos || '-' }}</td>
             <td>{{ m.abdomen || '-' }}</td>
           </tr>
         </tbody>
@@ -96,6 +98,7 @@ const medicion = ref({
   bicep_derecho: null,
   pierna_izquierda: null,
   pierna_derecha: null,
+  gluteos: null,
   abdomen: null
 })
 
@@ -112,6 +115,7 @@ const campos = [
   { key: 'bicep_derecho', label: 'Bíceps Derecho', placeholder: 'Ej: 34.8' },
   { key: 'pierna_izquierda', label: 'Pierna Izquierda', placeholder: 'Ej: 54.3' },
   { key: 'pierna_derecha', label: 'Pierna Derecha', placeholder: 'Ej: 54.1' },
+  { key: 'gluteos', label: 'Gluteos', placeholder: 'Ej: 34.8' },
   { key: 'abdomen', label: 'Abdomen', placeholder: 'Ej: 80.5' }
 ]
 
