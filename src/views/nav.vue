@@ -16,8 +16,8 @@
         <router-link to="/">Inicio</router-link>
 
         <template v-if="usuario?.rol === 'admin'">
-          <router-link to="/Registro">Registro Atletas</router-link>
-          <router-link to="/AgregarMediciones">Agregar Mediciones</router-link>
+          <router-link to="/Registro">Atletas</router-link>
+          <router-link to="/AgregarMediciones">Mediciones</router-link>
           <router-link to="/admin/reservas">Reservas</router-link>
           <router-link to="/admin/rutinas">Rutinas</router-link>
           <router-link to="/admin/dietas">Dietas</router-link>
