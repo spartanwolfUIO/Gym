@@ -297,25 +297,58 @@ const tiempoRestanteMembresia = (fechaFin) => {
 }
 
 const actualizarMembresia = async (atleta) => {
-  const dias = parseInt(prompt(`Ingrese cuántos días desea agregar a la membresía de ${atleta.nombres}:`, '0'))
-  if (isNaN(dias) || dias <= 0) return alert('Ingrese un número válido de días.')
+  // 1️⃣ Pedir meses
+  const meses = parseInt(
+    prompt(`¿Cuántos meses desea agregar a la membresía de ${atleta.nombres}?`, '1')
+  )
 
-  // Calcular nueva fecha de fin
-  const fechaActual = new Date(atleta.fecha_fin_membresia)
-  fechaActual.setDate(fechaActual.getDate() + dias)
+  if (isNaN(meses) || meses <= 0) {
+    return alert('Ingrese un número válido de meses.')
+  }
 
+  // 2️⃣ Elegir desde qué fecha actualizar
+  const opcion = prompt(
+    `¿Desde qué fecha desea actualizar la membresía?\n\n` +
+    `1 - Desde la fecha de vencimiento (${atleta.fecha_fin_membresia})\n` +
+    `2 - Desde hoy`,
+    '1'
+  )
+
+  if (opcion !== '1' && opcion !== '2') {
+    return alert('Opción inválida.')
+  }
+
+  // 3️⃣ Definir fecha base
+  let fechaBase
+
+  if (opcion === '1' && atleta.fecha_fin_membresia) {
+    fechaBase = new Date(atleta.fecha_fin_membresia)
+  } else {
+    fechaBase = new Date()
+  }
+
+  // 4️⃣ Sumar meses
+  fechaBase.setMonth(fechaBase.getMonth() + meses)
+
+  // 5️⃣ Guardar en Supabase
   const { error } = await supabase
     .from('atletas')
-    .update({ fecha_fin_membresia: fechaActual.toISOString().split('T')[0] })
+    .update({
+      fecha_fin_membresia: fechaBase.toISOString().split('T')[0]
+    })
     .eq('id', atleta.id)
 
   if (error) {
-    alert('Error al actualizar membresía: ' + error.message)
+    alert('❌ Error al actualizar membresía: ' + error.message)
   } else {
-    alert(`✅ Membresía actualizada. Nueva fecha fin: ${fechaActual.toLocaleDateString()}`)
+    alert(
+      `✅ Membresía actualizada correctamente.\n` +
+      `Nueva fecha de vencimiento: ${fechaBase.toLocaleDateString()}`
+    )
     await obtenerAtletas()
   }
 }
+//Prueba commits
 
 
 onMounted(obtenerAtletas)
