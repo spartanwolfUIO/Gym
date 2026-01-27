@@ -27,10 +27,10 @@ const error = ref(null)
 const login = async () => {
   error.value = null
 
-  // 1️⃣ Buscar usuario por cédula
+  // 1️⃣ Buscar usuario (incluye rol)
   const { data: user, error: errUser } = await supabase
     .from('usuarios')
-    .select('id, cedula, password')
+    .select('id, password, rol')
     .eq('cedula', cedula.value)
     .single()
 
@@ -45,7 +45,7 @@ const login = async () => {
     return
   }
 
-  // 3️⃣ Buscar atleta asociado al usuario
+  // 3️⃣ Buscar atleta asociado
   const { data: atleta, error: errAtleta } = await supabase
     .from('atletas')
     .select('*')
@@ -57,12 +57,19 @@ const login = async () => {
     return
   }
 
-  // 4️⃣ Guardar SOLO el atleta en localStorage
-  localStorage.setItem('usuario', JSON.stringify(atleta))
+  // 4️⃣ Unir rol del usuario con la data del atleta
+  const atletaSession = {
+    ...atleta,
+    rol: user.rol
+  }
 
-  // 5️⃣ Redirigir al home
+  // 5️⃣ Guardar sesión
+  localStorage.setItem('usuario', JSON.stringify(atletaSession))
+
+  // 6️⃣ Redirigir
   window.location.href = '/'
 }
+
 
 </script>
 <style scoped>
