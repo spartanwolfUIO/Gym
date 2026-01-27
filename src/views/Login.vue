@@ -27,25 +27,43 @@ const error = ref(null)
 const login = async () => {
   error.value = null
 
-  const { data: user, error: err } = await supabase
+  // 1️⃣ Buscar usuario por cédula
+  const { data: user, error: errUser } = await supabase
     .from('usuarios')
-    .select('*')
+    .select('id, cedula, password')
     .eq('cedula', cedula.value)
     .single()
 
-  if (err || !user) {
+  if (errUser || !user) {
     error.value = 'Usuario no encontrado'
     return
   }
 
+  // 2️⃣ Validar contraseña
   if (user.password !== password.value) {
     error.value = 'Contraseña incorrecta'
     return
   }
 
-  localStorage.setItem('usuario', JSON.stringify(user))
-  window.location.href = '/' // redirige al home
+  // 3️⃣ Buscar atleta asociado al usuario
+  const { data: atleta, error: errAtleta } = await supabase
+    .from('atletas')
+    .select('*')
+    .eq('usuario_id', user.id)
+    .single()
+
+  if (errAtleta || !atleta) {
+    error.value = 'El usuario no tiene atleta asociado'
+    return
+  }
+
+  // 4️⃣ Guardar SOLO el atleta en localStorage
+  localStorage.setItem('usuario', JSON.stringify(atleta))
+
+  // 5️⃣ Redirigir al home
+  window.location.href = '/'
 }
+
 </script>
 <style scoped>
 /* Contenedor principal */
